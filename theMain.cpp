@@ -1,12 +1,16 @@
 #include "DxLib.h"
+#include "Player.h"
+#include "Globals.h"
+#include "Input.h"
 
 namespace
 {
-	//XGA SIZE
-	const int WIN_WIDTH = 1024;
-	const int WIN_HEIGHT = 768;
+	const int BGCOLOR[3] = { 0, 0, 0 }; // 背景色
+	int crrTime;
+	int prevTime;
 }
 
+float gDeltaTime = 0.0f; // フレーム間の時間差
 
 void DxInit()
 {
@@ -15,7 +19,7 @@ void DxInit()
 	SetMainWindowText("TITLE");
 	SetGraphMode(WIN_WIDTH, WIN_HEIGHT, 32);
 	SetWindowSizeExtendRate(1.0);
-	SetBackgroundColor(255, 250, 205);
+	SetBackgroundColor(BGCOLOR[0], BGCOLOR[1], BGCOLOR[2]);
 
 	// ＤＸライブラリ初期化処理
 	if (DxLib_Init() == -1)
@@ -40,17 +44,31 @@ void MyGame()
 int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _In_ LPSTR lpCmdLine, _In_ int nCmdShow)
 {
 	DxInit();
+	crrTime = GetNowCount();
+	prevTime = GetNowCount();
+
+	Player* player = new Player();
 
 	while (true)
 	{
 		ClearDrawScreen();
+		Input::KeyStateUpdate(); // キー入力の状態を更新
 
+		crrTime = GetNowCount(); // 現在の時間を取得
+		// 前回の時間との差分を計算
+		float deltaTime = (crrTime - prevTime) / 1000.0f; // 秒単位に変換
+		gDeltaTime = deltaTime; // グローバル変数
 		//ここにやりたい処理を書く
+		player->Update();
+		player->Draw();
 		
 
 
 		ScreenFlip();
 		WaitTimer(16);
+
+		prevTime = crrTime; // 現在の時間を前回の時間として保存
+
 		if (ProcessMessage() == -1)
 			break;
 		if (CheckHitKey(KEY_INPUT_ESCAPE) == 1)
