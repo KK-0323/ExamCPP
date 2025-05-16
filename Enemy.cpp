@@ -1,26 +1,59 @@
 #include "Enemy.h"
 #include "DxLib.h"
+#include <string>
 
 namespace
 {
-	const int ENEMY_IMAGE_WIDTH = 48; // プレイヤーの画像の幅
-	const int ENEMY_IMAGE_HEIGHT = 48; // プレイヤーの画像の高さ
+	const int ENEMY_IMAGE_WIDTH = 48; // 敵の画像の幅;
+	const int ENEMY_IMAGE_HEIGHT = 48; // 敵の画像の高さ;
 
-	const float ENEMY_INIT_X = 100; // 敵の初期X座標
-	const float ENEMY_INIT_Y = 100; // 敵の初期Y座標
-	const float ENEMY_INIT_SPEED = 100.0f; // 敵の初期移動速度
+	const float ENEMY_INIT_X = 100; // 敵の初期X座標;
+	const float ENEMY_INIT_Y = 100; // 敵の初期Y座標;
+	const float ENEMY_INIT_SPEED = 100.0f; // 敵の初期移動速度;
 }
 
+
 Enemy::Enemy()
-	:GameObject(), 
+	:GameObject(),
 	hImage_(-1),
-	x_(0),y_(0),
+	x_(0), y_(0),
 	speed_(0),
 	isAlive_(true)
 {
 	hImage_ = LoadGraph("Assets\\tiny_ship10.png"); // 敵の画像を読み込む
-	if (hImage_ == -1) 
-	{
+	if (hImage_ == -1) {
+		// 画像の読み込みに失敗した場合のエラーハンドリング
+		// エラーを返してゲーム終了
+	}
+	x_ = ENEMY_INIT_X; // 初期座標
+	y_ = ENEMY_INIT_Y; // 初期座標
+	speed_ = ENEMY_INIT_SPEED; // 移動速度
+	//idとtypeをしていされなかったときのしょりをここに書かねば
+}
+
+Enemy::Enemy(int id, ETYPE type)
+	:GameObject(),
+	hImage_(-1),
+	x_(0), y_(0),
+	speed_(0),
+	isAlive_(true),
+	ID_(id), type_(type)
+
+{
+	//ETYPE::ZAKO =>  "Assets/tiny_ship10.png"
+	//ETYPE::MID = > "Assets/tiny_ship18.png"
+	//ETYPE::KNIGHT = > "Assets/tiny_ship16.png"
+	//ETYPE::BOSS = > "Assets/tiny_ship9.png"
+	// 画像の読み込み
+	std::string imagePath[MAX_ETYPE] = {
+		"Assets\\tiny_ship10.png", // ZAKO
+		"Assets\\tiny_ship18.png", // MID
+		"Assets\\tiny_ship16.png", // KNIGHT
+		"Assets\\tiny_ship9.png"   // BOSS
+	};
+
+	hImage_ = LoadGraph(imagePath[type_].c_str()); // 敵の画像を読み込む
+	if (hImage_ == -1) {
 		// 画像の読み込みに失敗した場合のエラーハンドリング
 		// エラーを返してゲーム終了
 	}
@@ -43,7 +76,7 @@ void Enemy::Update()
 
 void Enemy::Draw()
 {
-	// 画面の左上に敵画像の表示
-	DrawExtendGraph(x_, y_,x_ + ENEMY_IMAGE_WIDTH, y_ + ENEMY_IMAGE_HEIGHT,
-					hImage_, TRUE);
+	//画面の左上に敵画像を表示
+	DrawExtendGraph(x_, y_, x_ + ENEMY_IMAGE_WIDTH, y_ + ENEMY_IMAGE_HEIGHT,
+		hImage_, TRUE);
 }
