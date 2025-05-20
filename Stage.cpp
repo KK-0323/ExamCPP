@@ -12,6 +12,7 @@ namespace
 Stage::Stage()
 	:GameObject(), player_(nullptr)
 {
+	AddGameObject(this); // ステージオブジェクトのをゲームオブジェクト
 	player_ = new Player(); // プレイヤーオブジェクトの生成
 	enemy_ = std::vector<Enemy*>(ENEMY_NUM); // 敵オブジェクトの生成
 	for (int i = 0; i < ENEMY_NUM; i++) {
