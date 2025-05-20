@@ -1,12 +1,13 @@
 #include "DxLib.h"
-#include "Globals.h"
-#include "Input.h"
+#include "globals.h"
+#include "input.h"
 #include <vector>
 #include "Stage.h"
 
+
 namespace
 {
-	const int BGCOLOR[3] = { 0, 0, 0 }; // 背景色
+	const int BGCOLOR[3] = { 0, 0, 0 }; // 背景色{ 255, 250, 205 }; // 背景色
 	int crrTime;
 	int prevTime;
 }
@@ -52,7 +53,8 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 	crrTime = GetNowCount();
 	prevTime = GetNowCount();
 
-	Stage* stage = new Stage();
+	Stage* stage = new Stage(); // ステージオブジェクトの生成
+
 
 	while (true)
 	{
@@ -62,17 +64,16 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 		crrTime = GetNowCount(); // 現在の時間を取得
 		// 前回の時間との差分を計算
 		float deltaTime = (crrTime - prevTime) / 1000.0f; // 秒単位に変換
-		gDeltaTime = deltaTime; // グローバル変数
+		gDeltaTime = deltaTime; // グローバル変数に保存
 
-		//ここにやりたい処理を書く(ここから)
+		//ここにやりたい処理を書く(ここから）
 		//ゲームオブジェクトの追加
 		if (newObjects.size() > 0) {
 			for (auto& obj : newObjects) {
-				gameObjects.push_back(obj); // 新しいゲームオブジェクトを追加
+				gameObjects.push_back(obj); // 新しいゲームオブジェクトを追加	
 			}
 			newObjects.clear(); // 新しいゲームオブジェクトのベクターをクリア
 		}
-		
 		//gameObjectsの更新
 		for (auto& obj : gameObjects) {
 			obj->Update(); // ゲームオブジェクトの更新
@@ -81,9 +82,20 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 		for (auto& obj : gameObjects) {
 			obj->Draw(); // ゲームオブジェクトの描画
 		}
-		// ここにやりたい処理を書く(ここまで)
 
-		// 裏画面の描画
+		for (auto it = gameObjects.begin(); it != gameObjects.end();) {
+			if (!(*it)->IsAlive()) {
+				delete* it; // ゲームオブジェクトを削除
+				it = gameObjects.erase(it); // ベクターから削除
+			}
+			else {
+				++it; // 次の要素へ
+			}
+		}
+		//ここにやりたい処理を書く（ここまで）
+
+
+		//裏画面の描画
 		ScreenFlip();
 		WaitTimer(16);
 

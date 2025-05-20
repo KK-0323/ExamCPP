@@ -1,19 +1,25 @@
 #include "Player.h"
 #include "DxLib.h"
-#include "Globals.h"
+#include "globals.h"
 #include "Input.h"
 #include "Bullet.h"
 
-namespace 
-{
-	const float PLAYER_INIT_SPEED = 5.0f; // プレイヤーの初期移動速度
-	const int PLAYER_IMAGE_WIDTH = 48; // プレイヤーの画像の幅
-	const int PLAYER_IMAGE_HEIGHT = 48; // プレイヤーの画像の高さ
-	const int PLAYER_BASE_MARGIN = 32; // プレイヤーの基準マージン
 
-	const float PLAYER_INIT_X = WIN_WIDTH / 2 - PLAYER_IMAGE_WIDTH / 2; // プレイヤーの初期X座標
-	const float PLAYER_INIT_Y = WIN_HEIGHT - PLAYER_IMAGE_HEIGHT - PLAYER_BASE_MARGIN; // プレイヤーの初期Y座標
+namespace
+{
+	const float PLAYER_INIT_SPEED = 200.0f; // プレイヤーの初期移動速度;
+	const int PLAYER_IMAGE_WIDTH = 48; // プレイヤーの画像の幅;
+	const int PLAYER_IMAGE_HEIGHT = 48; // プレイヤーの画像の高さ;
+	const int PLAYER_BASE_MARGIN = 32; // プレイヤーの基準マージン;
+
+	const float PLAYER_INIT_X = WIN_WIDTH / 2 - PLAYER_IMAGE_WIDTH / 2; // プレイヤーの初期X座標;
+	const float PLAYER_INIT_Y = WIN_HEIGHT - PLAYER_IMAGE_HEIGHT - PLAYER_BASE_MARGIN; // プレイヤーの初期Y座標;
+	const int BULLET_IMAGE_MARGIN = 17; // 弾の画像のマージン;
+	const float BULLET_INTERVAL = 1.0f;
+
 }
+
+
 
 Player::Player()
 	:GameObject(), hImage_(-1), x_(0), y_(0), speed_(0)
@@ -26,31 +32,40 @@ Player::Player()
 	x_ = PLAYER_INIT_X; // 初期座標
 	y_ = PLAYER_INIT_Y; // 初期座標
 	speed_ = PLAYER_INIT_SPEED; // 移動速度
-	AddGameObject(this);
+	AddGameObject(this); // プレイヤーオブジェクトをゲームオブジェクトのベクターに追加
 }
-
 
 Player::~Player()
 {
+	//画面サイズを解放（あとで書く！）
 }
 
 void Player::Update()
 {
 	float dt = GetDeltaTime(); // フレーム間の時間差を取得
 	if (Input::IsKeepKeyDown(KEY_INPUT_LEFT)) {
-		x_ -= speed_ * dt; // 左に移動
+		x_ = x_ - speed_ * dt; // 左に移動
 	}
 	if (Input::IsKeepKeyDown(KEY_INPUT_RIGHT)) {
-		x_ += speed_ * dt; // 右に移動
+		x_ = x_ + speed_ * dt; // 右に移動
+	}
+	static float bulletTimer = 0.0f; // 弾の発射タイマー
+
+	if (bulletTimer > 0.0f) {
+		bulletTimer -= dt; // タイマーを現象
 	}
 
 	if (Input::IsKeyDown(KEY_INPUT_SPACE)) {
-		new Bullet(x_, y_); // 弾を発射
+		if (bulletTimer <= 0.0f) {
+			new Bullet(x_ + BULLET_IMAGE_MARGIN, y_); // 弾を発射
+			bulletTimer = BULLET_INTERVAL; // 弾の発射間隔をリセット
+		}
 	}
 }
 
 void Player::Draw()
 {
 	// プレイヤーの画像を描画(画像の原点は左上)
-	DrawExtendGraph(x_, y_, x_ + PLAYER_IMAGE_WIDTH, y_ + PLAYER_IMAGE_HEIGHT, hImage_, TRUE);
+	DrawExtendGraph(x_, y_, x_ + PLAYER_IMAGE_WIDTH, y_ + PLAYER_IMAGE_HEIGHT,
+		hImage_, TRUE);
 }

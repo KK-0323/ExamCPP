@@ -28,7 +28,7 @@ Enemy::Enemy()
 	x_ = ENEMY_INIT_X; // 初期座標
 	y_ = ENEMY_INIT_Y; // 初期座標
 	speed_ = ENEMY_INIT_SPEED; // 移動速度
-	AddGameObject(this);
+	//idとtypeをしていされなかったときのしょりをここに書かねば
 }
 
 Enemy::Enemy(int id, ETYPE type)
@@ -60,6 +60,7 @@ Enemy::Enemy(int id, ETYPE type)
 	x_ = ENEMY_INIT_X; // 初期座標
 	y_ = ENEMY_INIT_Y; // 初期座標
 	speed_ = ENEMY_INIT_SPEED; // 移動速度
+	AddGameObject(this); // 敵オブジェクトをゲームオブジェクトのベクターに追加
 }
 
 Enemy::~Enemy()
