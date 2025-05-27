@@ -11,6 +11,7 @@ public:
 	virtual void Update() = 0;
 	virtual void Draw() = 0;
 	bool IsAlive() { return isAlive_; } // ゲームオブジェクトが生きているかどうかを返す
+	void SetAlive(bool alive) { isAlive_ = alive; }
 };
 
 extern std::vector<GameObject*> gameObjects; // ゲームオブジェクトのベクター

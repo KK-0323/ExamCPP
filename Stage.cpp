@@ -21,7 +21,7 @@ Stage::Stage()
 		ETYPE enemyType[ENEMY_ROW_SIZE] = { BOSS, KNIGHT, MID, ZAKO, ZAKO, ZAKO, ZAKO }; // 敵の種類
 		enemy_[i] = new Enemy(i, enemyType[row]); // 敵オブジェクトの生成
 
-		enemy_[i]->SetPos(col * 55, row * 50); // 敵の初期位置を設定
+		enemy_[i]->SetPos(col * 55.0f, row * 50.0f); // 敵の初期位置を設定
 
 	}
 }
