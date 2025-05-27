@@ -32,16 +32,9 @@ Stage::~Stage()
 
 void Stage::Update()
 {
-	player_->Update(); // プレイヤーの更新
-	for (auto& elm : enemy_) {
-		elm->Update(); // 敵の更新
-	}
 }
 
 void Stage::Draw()
 {
-	player_->Draw(); // プレイヤーの描画
-	for (auto& elm : enemy_) {
-		elm->Draw(); // 敵の描画
-	}
+
 }
