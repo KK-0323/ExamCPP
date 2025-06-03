@@ -22,7 +22,7 @@ namespace
 
 
 Player::Player()
-	:GameObject(), hImage_(-1), x_(0), y_(0), speed_(0)
+	:GameObject(), hImage_(-1), x_(0), y_(0), speed_(0), imageSize_({ PLAYER_IMAGE_WIDTH, PLAYER_IMAGE_HEIGHT })
 {
 	hImage_ = LoadGraph("Assets\\tiny_ship5.png"); // ƒvƒŒƒCƒ„[‚Ì‰æ‘œ‚ğ“Ç‚İ‚Ş
 	if (hImage_ == -1) {

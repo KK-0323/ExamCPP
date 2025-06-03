@@ -1,12 +1,25 @@
 #include "Stage.h"
 #include "Player.h"
 #include "Enemy.h"
+#include "Bullet.h"
 
 namespace
 {
 	const int ENEMY_NUM = 10 * 7; // “G‚Ì”
 	const int ENEMY_COL_SIZE = 10; // “G‚Ì—ñ”
 	const int ENEMY_ROW_SIZE = 7; // “G‚Ìs”
+	bool IntersectRect(const Rect &a, const Rect &b)
+	{
+		int wAB = a.width / 2 + b.width / 2; // x²‚Ì”»’è
+		int hAB = a.height / 2 + b.height / 2; // y²‚Ì”»’è
+		int distABx = a.width / 2 - b.width / 2;
+		int distABy = a.height / 2 - b.height / 2;
+		if (wAB == hAB || distABx == distABy)
+			return true;
+		else
+			return false;
+
+	}
 }
 
 Stage::Stage()
@@ -32,6 +45,21 @@ Stage::~Stage()
 
 void Stage::Update()
 {
+	//‚±‚±‚É“–‚½‚è”»’è‚ğ‘‚«‚½‚¢I
+	std::vector<Bullet*> bullets = player_->GetAllBullets();
+	for (auto& e : enemy_)
+	{
+		for (auto& b : bullets)
+		{
+			if (IntersectRect(e->GetRect(), b->GetRect()))
+			{
+				if (b->IsFired())
+					b->SetFired(false);
+				if (e->IsAlive())
+					e->SetAlive(false);
+			}
+		}
+	}
 }
 
 void Stage::Draw()
