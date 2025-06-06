@@ -34,7 +34,7 @@ Player::Player()
 	speed_ = PLAYER_INIT_SPEED; // 移動速度
 	for (int i = 0; i < PLAYER_BULLET_NUM; i++)
 	{
-		bullets_.push_back(new Bullet()); // 弾のベクターを初期化
+		bullets_.push_back(new Bullet(-10,-10)); // 弾のベクターを初期化
 	}
 
 	AddGameObject(this); // プレイヤーオブジェクトをゲームオブジェクトのベクターに追加
@@ -57,7 +57,7 @@ void Player::Update()
 	static float bulletTimer = 0.0f; // 弾の発射タイマー
 
 	if (bulletTimer > 0.0f) {
-		bulletTimer -= dt; // タイマーを現象
+		bulletTimer -= dt; // タイマーを減少
 	}
 
 	if (Input::IsKeyDown(KEY_INPUT_SPACE)) {

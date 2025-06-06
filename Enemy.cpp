@@ -1,6 +1,7 @@
 #include "Enemy.h"
 #include "DxLib.h"
 #include <string>
+#include "Effect.h"
 
 namespace
 {
@@ -34,7 +35,8 @@ Enemy::Enemy(int id, ETYPE type)
 	hImage_(-1),
 	x_(0), y_(0),
 	speed_(0),
-	ID_(id), type_(type)
+	ID_(id), type_(type),
+	imageSize_({ ENEMY_IMAGE_WIDTH, ENEMY_IMAGE_HEIGHT })
 
 {
 	//ETYPE::ZAKO =>  "Assets/tiny_ship10.png"
@@ -62,6 +64,7 @@ Enemy::Enemy(int id, ETYPE type)
 
 Enemy::~Enemy()
 {
+	new Effect({ x_, y_ });
 	if (hImage_ != -1)
 	{
 		DeleteGraph(hImage_); // ‰æ‘œ‚Ìƒnƒ“ƒhƒ‹‚ð‰ð•ú

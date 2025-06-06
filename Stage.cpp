@@ -1,3 +1,4 @@
+#include <DxLib.h>
 #include "Stage.h"
 #include "Player.h"
 #include "Enemy.h"
@@ -8,22 +9,31 @@ namespace
 	const int ENEMY_NUM = 10 * 7; // 敵の数
 	const int ENEMY_COL_SIZE = 10; // 敵の列数
 	const int ENEMY_ROW_SIZE = 7; // 敵の行数
-	bool IntersectRect(const Rect &a, const Rect &b)
+	bool IntersectRect(const Rect &a_, const Rect &b_)
 	{
-		int wAB = a.width / 2 + b.width / 2; // x軸の判定
-		int hAB = a.height / 2 + b.height / 2; // y軸の判定
-		int distABx = a.width / 2 - b.width / 2;
-		int distABy = a.height / 2 - b.height / 2;
-		if (wAB == hAB || distABx == distABy)
-			return true;
-		else
-			return false;
+		// 自分なりに考えたやつ
+		
+		//int wAB = a.width / 2 + b.width / 2; // x軸の判定
+		//int hAB = a.height / 2 + b.height / 2; // y軸の判定
+		//int distABx = a.width - b.width; // 
+		//int distABy = a.height - b.height;
+		//if (distABx < wAB && distABy < hAB)
+		//	return true;
+		//else
+		//	return false;
 
+		// x軸方向の当たり判定
+		bool xOverlap = (a_.x < b_.x + b_.width) && (b_.x + a_.x + a_.width);
+		// y軸方向の当たり判定
+		bool yOverlap = (a_.y < b_.y + b_.height) && (b_.y + a_.y + a_.height);
+
+		// x軸とy軸両方で重なっていれば衝突している
+		return xOverlap && yOverlap;
 	}
 }
 
 Stage::Stage()
-	:GameObject(), player_(nullptr)
+	:GameObject(), player_(nullptr), hBackground(-1)
 {
 	AddGameObject(this); // ステージオブジェクトのをゲームオブジェクト
 	player_ = new Player(); // プレイヤーオブジェクトの生成
@@ -37,6 +47,7 @@ Stage::Stage()
 		enemy_[i]->SetPos(col * 55.0f, row * 50.0f); // 敵の初期位置を設定
 
 	}
+	hBackground = LoadGraph("Assets\\bg.png");
 }
 
 Stage::~Stage()
@@ -51,12 +62,15 @@ void Stage::Update()
 	{
 		for (auto& b : bullets)
 		{
-			if (IntersectRect(e->GetRect(), b->GetRect()))
+			if (b->IsFired() && e->IsAlive()) 
 			{
-				if (b->IsFired())
-					b->SetFired(false);
-				if (e->IsAlive())
-					e->SetAlive(false);
+				if (IntersectRect(e->GetRect(), b->GetRect()))
+				{
+					if (b->IsFired())
+						b->SetFired(false);
+					if (e->IsAlive())
+						e->SetAlive(false);
+				}
 			}
 		}
 	}
@@ -64,5 +78,7 @@ void Stage::Update()
 
 void Stage::Draw()
 {
-
+	SetDrawBlendMode(DX_BLENDMODE_ALPHA, 100);
+	DrawExtendGraph(0, 0, WIN_WIDTH, WIN_HEIGHT, hBackground, FALSE);
+	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 }
