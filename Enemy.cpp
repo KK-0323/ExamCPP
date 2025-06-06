@@ -16,7 +16,9 @@ namespace
 
 Enemy::Enemy()
 	:GameObject(),
-	hImage_(-1),x_(0), y_(0),speed_(0),
+	hImage_(-1),
+	x_(0), y_(0),
+	speed_(0),
 	imageSize_({ ENEMY_IMAGE_WIDTH, ENEMY_IMAGE_HEIGHT })
 {
 	hImage_ = LoadGraph("Assets\\tiny_ship10.png"); // “G‚Ì‰æ‘œ‚ğ“Ç‚İ‚Ş

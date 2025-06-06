@@ -23,9 +23,9 @@ namespace
 		//	return false;
 
 		// x²•ûŒü‚Ì“–‚½‚è”»’è
-		bool xOverlap = (a_.x < b_.x + b_.width) && (b_.x + a_.x + a_.width);
+		bool xOverlap = (a_.x < b_.x + b_.width) && (b_.x < a_.x + a_.width);
 		// y²•ûŒü‚Ì“–‚½‚è”»’è
-		bool yOverlap = (a_.y < b_.y + b_.height) && (b_.y + a_.y + a_.height);
+		bool yOverlap = (a_.y < b_.y + b_.height) && (b_.y < a_.y + a_.height);
 
 		// x²‚Æy²—¼•û‚Åd‚È‚Á‚Ä‚¢‚ê‚ÎÕ“Ë‚µ‚Ä‚¢‚é
 		return xOverlap && yOverlap;
@@ -78,7 +78,7 @@ void Stage::Update()
 
 void Stage::Draw()
 {
-	SetDrawBlendMode(DX_BLENDMODE_ALPHA, 100);
+	SetDrawBlendMode(DX_BLENDMODE_ALPHA, 200);
 	DrawExtendGraph(0, 0, WIN_WIDTH, WIN_HEIGHT, hBackground, FALSE);
 	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 }

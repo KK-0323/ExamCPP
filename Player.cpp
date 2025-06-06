@@ -47,12 +47,19 @@ Player::~Player()
 
 void Player::Update()
 {
+	Point nextP = { x_, y_ };
 	float dt = GetDeltaTime(); // フレーム間の時間差を取得
 	if (Input::IsKeepKeyDown(KEY_INPUT_LEFT)) {
-		x_ = x_ - speed_ * dt; // 左に移動
+		nextP.x = x_ - speed_ * dt; // 左に移動
 	}
 	if (Input::IsKeepKeyDown(KEY_INPUT_RIGHT)) {
-		x_ = x_ + speed_ * dt; // 右に移動
+		nextP.x = x_ + speed_ * dt; // 右に移動
+	}
+
+	if (nextP.x >= 0 && nextP.x + PLAYER_IMAGE_WIDTH <= WIN_WIDTH)
+	{
+		x_ = nextP.x;
+		y_ = nextP.y;
 	}
 	static float bulletTimer = 0.0f; // 弾の発射タイマー
 

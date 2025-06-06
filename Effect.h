@@ -1,6 +1,7 @@
 #pragma once
 #include "GameObject.h"
 #include "Globals.h"
+#include <vector>
 
 class Effect :
     public GameObject
@@ -12,9 +13,11 @@ public:
     void Draw() override;
 protected:
 private:
-    int hImage_;
+    std::vector<int>hImage_;
     Point pos_;
     float animeTimer_;
+    float frameTimer_;
+    int frame_;
 };
 
 //“G‚Æ“G‚Ì‚Ô‚Â‚©‚Á‚½êŠ‚É”­¶‚µ‚Ä3•b‚ÅÁ‚¦‚é
