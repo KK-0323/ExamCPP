@@ -75,6 +75,12 @@ Enemy::~Enemy()
 
 void Enemy::Update()
 {
+	float period = 10.0f;
+	float omega = 2.0f * 3.14159265f / period;
+	moveTime_ = moveTime_ + GetDeltaTime();
+	
+	
+	y_ = y_;
 }
 
 void Enemy::Draw()

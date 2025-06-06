@@ -9,10 +9,14 @@ namespace
 	const int ENEMY_NUM = 10 * 7; // 敵の数
 	const int ENEMY_COL_SIZE = 10; // 敵の列数
 	const int ENEMY_ROW_SIZE = 7; // 敵の行数
+	const float ENEMY_ALIGN_X = 55.0f; //敵を並べる幅
+	const float ENEMY_ALIGN_Y = 50.0f; //敵を並べる高さ
+	const int ENEMY_LEFT_MARGIN = (WIN_WIDTH - (ENEMY_ALIGN_X * ENEMY_COL_SIZE * 1.5));
+	const int ENEMY_TOP_MARGIN = 75;
+
 	bool IntersectRect(const Rect &a_, const Rect &b_)
 	{
 		// 自分なりに考えたやつ
-		
 		//int wAB = a.width / 2 + b.width / 2; // x軸の判定
 		//int hAB = a.height / 2 + b.height / 2; // y軸の判定
 		//int distABx = a.width - b.width; // 
@@ -44,7 +48,8 @@ Stage::Stage()
 		ETYPE enemyType[ENEMY_ROW_SIZE] = { BOSS, KNIGHT, MID, ZAKO, ZAKO, ZAKO, ZAKO }; // 敵の種類
 		enemy_[i] = new Enemy(i, enemyType[row]); // 敵オブジェクトの生成
 
-		enemy_[i]->SetPos(col * 55.0f, row * 50.0f); // 敵の初期位置を設定
+		enemy_[i]->SetPos(col * ENEMY_ALIGN_X + ENEMY_LEFT_MARGIN,
+						  row * ENEMY_ALIGN_Y + ENEMY_TOP_MARGIN); // 敵の初期位置を設定
 
 	}
 	hBackground = LoadGraph("Assets\\bg.png");
