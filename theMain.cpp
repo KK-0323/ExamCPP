@@ -10,6 +10,12 @@ namespace
 	const int BGCOLOR[3] = { 0, 0, 0 }; // 背景色{ 255, 250, 205 }; // 背景色
 	int crrTime;
 	int prevTime;
+	enum Scene
+	{
+		TITLE,
+		PLAY,
+		GAMEOVER
+	};
 }
 
 std::vector<GameObject*> gameObjects; // ゲームオブジェクトのベクター
@@ -45,7 +51,8 @@ void MyGame()
 	DrawFormatString(100, 150, GetColor(0, 0, 0), "%010d", timer);
 }
 
-
+// 現在のシーン
+Scene currentScene = TITLE;
 
 int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _In_ LPSTR lpCmdLine, _In_ int nCmdShow)
 {
@@ -67,6 +74,23 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 		gDeltaTime = deltaTime; // グローバル変数に保存
 
 		//ここにやりたい処理を書く(ここから）
+		// シーン分け
+		switch (currentScene)
+		{
+		case TITLE:
+			DrawString(WIN_WIDTH / 2, 100, "TITLE", GetColor(255, 255, 255));
+			if (CheckHitKey(KEY_INPUT_I))
+			{
+				currentScene = PLAY;
+			}
+			break;
+		case PLAY:
+			break;
+		case GAMEOVER:
+			break;
+		default:
+			break;
+		}
 		//ゲームオブジェクトの追加
 		if (newObjects.size() > 0) {
 			for (auto& obj : newObjects) {

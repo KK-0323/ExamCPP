@@ -1,4 +1,4 @@
-#include <DxLib.h>More actions
+#include <DxLib.h>
 #include "Stage.h"
 #include "Player.h"
 #include "Enemy.h"
