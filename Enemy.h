@@ -28,10 +28,10 @@ private:
 	int hImage_;  //“G‚Ì‰æ‘œƒnƒ“ƒhƒ‹
 	float x_, y_; //“G‚ÌÀ•W
 	float speed_; //“G‚ÌˆÚ“®‘¬“x
-	Point imageSize_;
 	float xMoveMax_;
 	float xorigin_;
 	float moveTime_;
+	Point imageSize_;
 
 	int ID_; //“G‚ÌID
 	ETYPE type_; //“G‚Ìí—Ş

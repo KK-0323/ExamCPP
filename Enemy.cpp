@@ -2,6 +2,7 @@
 #include "DxLib.h"
 #include <string>
 #include "Effect.h"
+#include "EnemyBeam.h"
 
 namespace
 {
@@ -37,8 +38,7 @@ Enemy::Enemy(int id, ETYPE type)
 	hImage_(-1),
 	x_(0), y_(0),
 	speed_(0),
-	ID_(id), type_(type),
-	imageSize_({ ENEMY_IMAGE_WIDTH, ENEMY_IMAGE_HEIGHT })
+	ID_(id), type_(type), imageSize_({ ENEMY_IMAGE_WIDTH, ENEMY_IMAGE_HEIGHT })
 
 {
 	//ETYPE::ZAKO =>  "Assets/tiny_ship10.png"
@@ -53,6 +53,7 @@ Enemy::Enemy(int id, ETYPE type)
 		"Assets\\tiny_ship9.png"   // BOSS
 	};
 
+	moveTime_ = 0.0f;
 	hImage_ = LoadGraph(imagePath[type_].c_str()); // 敵の画像を読み込む
 	if (hImage_ == -1) {
 		// 画像の読み込みに失敗した場合のエラーハンドリング
@@ -75,17 +76,28 @@ Enemy::~Enemy()
 
 void Enemy::Update()
 {
-	float period = 10.0f;
-	float omega = 2.0f * 3.14159265f / period;
+	static float beamTimer = 3.0f; // 弾の発射タイマー
+
+	float period = 10.0f; // 1往復にかける時間（秒）
+	float omega = 2.0f * 3.14159265f / period; // 角速度 ω = 2π / T
 	moveTime_ = moveTime_ + GetDeltaTime();
-	
-	
+	x_ = xorigin_ + xMoveMax_ / 2.0 * sinf(omega * moveTime_);
 	y_ = y_;
+
+	if (beamTimer < 0)
+	{
+		// 弾を発射
+		new EnemyBeam(x_ + ENEMY_IMAGE_WIDTH / 2, y_ + ENEMY_IMAGE_HEIGHT);
+		beamTimer = 3.0f;
+	}
+
+	beamTimer -= GetDeltaTime(); // タイマーを減少
 }
 
 void Enemy::Draw()
 {
 	//画面の左上に敵画像を表示
-	DrawExtendGraphF(x_, y_, x_ + ENEMY_IMAGE_WIDTH, y_ + ENEMY_IMAGE_HEIGHT,
+	DrawExtendGraphF(x_, y_,
+		x_ + ENEMY_IMAGE_WIDTH, y_ + ENEMY_IMAGE_HEIGHT,
 		hImage_, TRUE);
 }

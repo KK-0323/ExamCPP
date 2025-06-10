@@ -42,14 +42,8 @@ void Effect::Update()
 	frameTimer_ = frameTimer_ - dt;
 	if (frameTimer_ < 0)
 	{
-		frameTimer_ = FRAME_SIZE;
 		frame_++;
-		if (frame_ >= MAX_FRAME) {
-			frame_ = 0;
-		}
-	}
-	else
-	{
+		frameTimer_ = FRAME_SIZE - frameTimer_; // ƒŠƒZƒbƒg
 	}
 }
 

@@ -15,9 +15,9 @@ protected:
 private:
     std::vector<int>hImage_;
     Point pos_;
-    float animeTimer_;
-    float frameTimer_;
-    int frame_;
+    float animeTimer_; // エフェクトの寿命
+    float frameTimer_; // アニメのコマのタイマー
+    int frame_; // フレーム番号
 };
 
 //敵と敵のぶつかった場所に発生して3秒で消える

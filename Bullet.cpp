@@ -57,7 +57,8 @@ void Bullet::Draw()
 	if (isFired_)
 	{
 
-		DrawExtendGraphF(x_, y_, x_ + imageSize_.x, y_ + imageSize_.y,
+		DrawExtendGraphF(x_, y_,
+			x_ + imageSize_.x, y_ + imageSize_.y,
 			hImage_, TRUE); // ’e‚Ì•`‰æ
 	}
 }
