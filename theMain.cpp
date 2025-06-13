@@ -78,44 +78,57 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 		switch (currentScene)
 		{
 		case TITLE:
-			DrawString(WIN_WIDTH / 2, 100, "TITLE", GetColor(255, 255, 255));
-			if (CheckHitKey(KEY_INPUT_I))
+			DrawString(100, 100, "TITLE", GetColor(255, 255, 255));
+			DrawString(100, 200, "Push [P] the PlayScene", GetColor(255, 255, 255));
+			if (CheckHitKey(KEY_INPUT_P))
 			{
 				currentScene = PLAY;
 			}
 			break;
 		case PLAY:
+			//ゲームオブジェクトの追加
+			if (newObjects.size() > 0) {
+				for (auto& obj : newObjects) {
+					gameObjects.push_back(obj); // 新しいゲームオブジェクトを追加	
+				}
+				newObjects.clear(); // 新しいゲームオブジェクトのベクターをクリア
+			}
+			//gameObjectsの更新
+			for (auto& obj : gameObjects) {
+				obj->Update(); // ゲームオブジェクトの更新
+			}
+			//gameObjectsの描画
+			for (auto& obj : gameObjects) {
+				obj->Draw(); // ゲームオブジェクトの描画
+			}
+
+			for (auto it = gameObjects.begin(); it != gameObjects.end();) {
+				if (!(*it)->IsAlive()) {
+					delete* it; // ゲームオブジェクトを削除
+					it = gameObjects.erase(it); // ベクターから削除
+				}
+				else {
+					++it; // 次の要素へ
+				}
+			}
+			DrawString(100, 100, "PLAY", GetColor(255, 255, 255));
+			if (CheckHitKey(KEY_INPUT_O))
+			{
+				currentScene = GAMEOVER;
+			}
 			break;
-		case GAMEOVER:
+		case GAMEOVER: //仮の条件
+			DrawString(100, 100, "GAMEOVER", GetColor(255, 255, 255));
+			DrawString(100, 200, "Push [T] the TitleScene", GetColor(255, 255, 255));
+			if (CheckHitKey(KEY_INPUT_T))
+			{
+				currentScene = TITLE;
+			}
 			break;
 		default:
 			break;
 		}
-		//ゲームオブジェクトの追加
-		if (newObjects.size() > 0) {
-			for (auto& obj : newObjects) {
-				gameObjects.push_back(obj); // 新しいゲームオブジェクトを追加	
-			}
-			newObjects.clear(); // 新しいゲームオブジェクトのベクターをクリア
-		}
-		//gameObjectsの更新
-		for (auto& obj : gameObjects) {
-			obj->Update(); // ゲームオブジェクトの更新
-		}
-		//gameObjectsの描画
-		for (auto& obj : gameObjects) {
-			obj->Draw(); // ゲームオブジェクトの描画
-		}
-
-		for (auto it = gameObjects.begin(); it != gameObjects.end();) {
-			if (!(*it)->IsAlive()) {
-				delete* it; // ゲームオブジェクトを削除
-				it = gameObjects.erase(it); // ベクターから削除
-			}
-			else {
-				++it; // 次の要素へ
-			}
-		}
+		
 		//ここにやりたい処理を書く（ここまで）
 
 
