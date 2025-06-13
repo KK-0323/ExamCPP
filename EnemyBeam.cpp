@@ -60,11 +60,12 @@ void EnemyBeam::Update()
 void EnemyBeam::Draw()
 {
 	//”­ŽË‚³‚ê‚Ä‚¢‚½‚ç•`‰æ
-	if (isFired_)
-	{
+		if (isFired_)
+		{
 
-		DrawExtendGraphF(pos_.x, pos_.y,
-			pos_.x + imageSize_.x, pos_.y + imageSize_.y,
-			hImage_, TRUE);
-	}
+			DrawExtendGraphF(pos_.x, pos_.y,
+				pos_.x + imageSize_.x, pos_.y + imageSize_.y,
+				hImage_, TRUE);
+
+		}
 }
