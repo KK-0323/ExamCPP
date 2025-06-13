@@ -12,6 +12,7 @@ namespace
 	const float ENEMY_INIT_X = 100; // 敵の初期X座標;
 	const float ENEMY_INIT_Y = 100; // 敵の初期Y座標;
 	const float ENEMY_INIT_SPEED = 100.0f; // 敵の初期移動速度;
+	const float ENEMY_BEAM_INTERVAL = 5.0f;
 	const int ENEMY_BEAM_NUM = 5; // 敵が同時に発射する弾の数
 }
 
@@ -63,6 +64,9 @@ Enemy::Enemy(int id, ETYPE type)
 	x_ = ENEMY_INIT_X; // 初期座標
 	y_ = ENEMY_INIT_Y; // 初期座標
 	speed_ = ENEMY_INIT_SPEED; // 移動速度
+	for (int i = 0; i < ENEMY_BEAM_NUM; i++) {
+		beams_.push_back(new EnemyBeam(-10, -10)); // 弾のベクターを初期化
+	}
 	AddGameObject(this); // 敵オブジェクトをゲームオブジェクトのベクターに追加
 }
 
@@ -90,7 +94,7 @@ void Enemy::Update()
 		// 弾を発射
 		new EnemyBeam(x_ + ENEMY_IMAGE_WIDTH / 2, y_ + ENEMY_IMAGE_HEIGHT);
 		
-		beamTimer = 3.0f;
+		beamTimer = ENEMY_BEAM_INTERVAL;
 	}
 	beamTimer -= GetDeltaTime(); // タイマーを減少
 }
@@ -101,4 +105,16 @@ void Enemy::Draw()
 	DrawExtendGraphF(x_, y_,
 		x_ + ENEMY_IMAGE_WIDTH, y_ + ENEMY_IMAGE_HEIGHT,
 		hImage_, TRUE);
+}
+
+EnemyBeam* Enemy::GetActiveBeam()
+{
+	for (auto& itr : beam_)
+	{
+		if (!itr->IsFired())
+		{
+			return itr; // 発射されていない弾を返す
+		}
+	}
+	return nullptr;
 }

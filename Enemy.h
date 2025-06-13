@@ -32,7 +32,8 @@ private:
 	float xorigin_;
 	float moveTime_;
 	Point imageSize_;
-
+	std::vector<EnemyBeam*>beams_; // “G‚ª”­Ë‚µ‚½’e‚ÌƒxƒNƒ^[
+	EnemyBeam* GetActiveBullet();
 	int ID_; //“G‚ÌID
 	ETYPE type_; //“G‚Ìí—Ş
 };
