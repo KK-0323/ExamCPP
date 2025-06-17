@@ -3,6 +3,7 @@
 #include "Player.h"
 #include "Enemy.h"
 #include "Bullet.h"
+#include "EnemyBeam.h"
 
 namespace
 {
@@ -28,10 +29,10 @@ namespace
 }
 
 Stage::Stage()
-	:GameObject(), player_(nullptr), hBackground(-1)
+	:GameObject(), play_(nullptr), hBackground(-1)
 {
 	AddGameObject(this); // ステージオブジェクトをゲームオブジェクトのベクターに追加
-	player_ = new Player(); // プレイヤーオブジェクトの生成
+	play_ = new Player(); // プレイヤーオブジェクトの生成
 	enemy_ = std::vector<Enemy*>(ENEMY_NUM); // 敵オブジェクトの生成
 	for (int i = 0; i < ENEMY_NUM; i++) {
 		int col = i % ENEMY_COL_SIZE; // 列
@@ -57,7 +58,9 @@ Stage::~Stage()
 void Stage::Update()
 {
 	//ここに当たり判定を描きたい！
-	std::vector<Bullet*> bullets = player_->GetAllBullets();
+	std::vector<Bullet*> bullets = play_->GetAllBullets();
+	std::vector<EnemyBeam*> beams = ene_->GetAllBeams();
+	
 	for (auto& e : enemy_)
 	{
 		for (auto& b : bullets)
@@ -69,6 +72,21 @@ void Stage::Update()
 						b->SetFired(false);
 					if (e->IsAlive())
 						e->SetAlive(false);
+				}
+			}
+		}
+	}
+	for (auto&  p: player_)
+	{
+		for (auto& b : beams)
+		{
+			if (b->IsFired() && p->IsAlive()) {
+				if (IntersectRect(p->GetRect(), b->GetRect()))
+				{
+					if (b->IsFired())
+						b->SetFired(false);
+					if (p->IsAlive())
+						p->SetAlive(false);
 				}
 			}
 		}

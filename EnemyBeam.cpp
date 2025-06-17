@@ -1,11 +1,13 @@
 #include "EnemyBeam.h"
 #include "DxLib.h"
+#include <string>
 
 namespace
 {
 	const int ENEMY_BEAM_IMAGE_WIDTH = 11; // 弾の画像の幅;
 	const int ENEMY_BEAM_IMAGE_HEIGHT = 21; // 弾の画像の高さ;
 	const float ENEMY_BEAM_INIT_SPEED = 250.0f; // 弾の初期移動速度;
+	const std::string ENEMY_BEAM_IMAGE_PATH = "Assets\\ebeams.png";
 }
 
 EnemyBeam::EnemyBeam()
@@ -13,7 +15,7 @@ EnemyBeam::EnemyBeam()
 	speed_(ENEMY_BEAM_INIT_SPEED),isFired_(true), 
 	imageSize_({ ENEMY_BEAM_IMAGE_WIDTH,ENEMY_BEAM_IMAGE_HEIGHT }) // 初期サイズを設定
 {
-	hImage_ = LoadGraph("Assets\\ebeams.png"); // 弾の画像を読み込む
+	hImage_ = LoadGraph(ENEMY_BEAM_IMAGE_PATH.c_str()); // 弾の画像を読み込む
 
 	AddGameObject(this); // 弾オブジェクトをゲームオブジェクトのベクターに追加
 
@@ -24,7 +26,7 @@ EnemyBeam::EnemyBeam(float x, float y)
 	speed_(ENEMY_BEAM_INIT_SPEED), isFired_(true), // 後で書き換える!
 	imageSize_({ ENEMY_BEAM_IMAGE_WIDTH,ENEMY_BEAM_IMAGE_HEIGHT })
 {
-	hImage_ = LoadGraph("Assets\\ebeams.png"); // 弾の画像を読み込む
+	hImage_ = LoadGraph(ENEMY_BEAM_IMAGE_PATH.c_str()); // 弾の画像を読み込む
 
 	AddGameObject(this); // 弾オブジェクトをゲームオブジェクトのベクターに追加
 }
@@ -34,7 +36,7 @@ EnemyBeam::EnemyBeam(Point pos_)
 	speed_(ENEMY_BEAM_INIT_SPEED), isFired_(true),
 	imageSize_({ ENEMY_BEAM_IMAGE_WIDTH,ENEMY_BEAM_IMAGE_HEIGHT })
 {
-	hImage_ = LoadGraph("Assets\\ebeams.png"); // 弾の画像を読み込む
+	hImage_ = LoadGraph(ENEMY_BEAM_IMAGE_PATH.c_str()); // 弾の画像を読み込む
 
 	AddGameObject(this); // 弾オブジェクトをゲームオブジェクトのベクターに追加
 }
@@ -68,4 +70,12 @@ void EnemyBeam::Draw()
 				hImage_, TRUE);
 
 		}
+}
+
+void EnemyBeam::SetPos(float x, float y)
+{
+}
+
+void EnemyBeam::SetPos(const Point& pos)
+{
 }

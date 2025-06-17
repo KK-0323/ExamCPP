@@ -3,6 +3,7 @@
 #include "globals.h"
 #include "Input.h"
 #include "Bullet.h"
+#include "Effect.h"
 
 
 namespace
@@ -43,16 +44,21 @@ Player::Player()
 Player::~Player()
 {
 	//画面サイズを解放（あとで書く！）
+	new Effect({ x_, y_ });
+	if (hImage_ != -1)
+	{
+		DeleteGraph(hImage_); // 画像のハンドルを解放
+	}
 }
 
 void Player::Update()
 {
 	Point nextP = { x_, y_ };
 	float dt = GetDeltaTime(); // フレーム間の時間差を取得
-	if (Input::IsKeepKeyDown(KEY_INPUT_LEFT)) {
+	if (Input::IsKeepKeyDown(KEY_INPUT_A)){
 		nextP.x = x_ - speed_ * dt; // 左に移動
 	}
-	if (Input::IsKeepKeyDown(KEY_INPUT_RIGHT)) {
+	if (Input::IsKeepKeyDown(KEY_INPUT_D)) {
 		nextP.x = x_ + speed_ * dt; // 右に移動
 	}
 

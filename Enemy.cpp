@@ -32,6 +32,10 @@ Enemy::Enemy()
 	x_ = ENEMY_INIT_X; // 初期座標
 	y_ = ENEMY_INIT_Y; // 初期座標
 	speed_ = ENEMY_INIT_SPEED; // 移動速度
+	//for (int i = 0; i < ENEMY_BEAM_NUM; i++)
+	//{
+	//	beams_.push_back(new EnemyBeam(-10, -10));
+	//}
 	//idとtypeを指定されなかったときのしょりをここに書かねば
 }
 
@@ -64,9 +68,9 @@ Enemy::Enemy(int id, ETYPE type)
 	x_ = ENEMY_INIT_X; // 初期座標
 	y_ = ENEMY_INIT_Y; // 初期座標
 	speed_ = ENEMY_INIT_SPEED; // 移動速度
-	for (int i = 0; i < ENEMY_BEAM_NUM; i++) {
-		beams_.push_back(new EnemyBeam(-10, -10)); // 弾のベクターを初期化
-	}
+	//for (int i = 0; i < ENEMY_BEAM_NUM; i++) {
+	//	beams_.push_back(new EnemyBeam(-10, -10)); // 弾のベクターを初期化
+	//}
 	AddGameObject(this); // 敵オブジェクトをゲームオブジェクトのベクターに追加
 }
 
@@ -92,6 +96,7 @@ void Enemy::Update()
 	if (beamTimer < 0)
 	{
 		// 弾を発射
+		//Shoot();
 		new EnemyBeam(x_ + ENEMY_IMAGE_WIDTH / 2, y_ + ENEMY_IMAGE_HEIGHT);
 		
 		beamTimer = ENEMY_BEAM_INTERVAL;
@@ -107,14 +112,28 @@ void Enemy::Draw()
 		hImage_, TRUE);
 }
 
-EnemyBeam* Enemy::GetActiveBeam()
-{
-	for (auto& itr : beam_)
-	{
-		if (!itr->IsFired())
-		{
-			return itr; // 発射されていない弾を返す
-		}
-	}
-	return nullptr;
-}
+//EnemyBeam* Enemy::GetActiveBeam()
+//{
+//	return nullptr;
+//}
+
+//void Enemy::Shoot()
+//{
+//	EnemyBeam* beam = GetActiveBeam();
+//	if (beam != nullptr) {
+//		beam->SetPos(x_, y_);
+//		beam->SetFired(true);
+//	}
+//}
+//
+//EnemyBeam* Enemy::GetActiveBeam()
+//{
+//	for (auto& itr : beams_)
+//	{
+//		if (!itr->IsFired())
+//		{
+//			return itr; // 発射されていない弾を返す
+//		}
+//	}
+//	return nullptr;
+//}
