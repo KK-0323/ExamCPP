@@ -3,13 +3,12 @@
 #include "input.h"
 #include <vector>
 #include "Stage.h"
+#include "Player.h"
 
 
 namespace
 {
 	const int BGCOLOR[3] = { 0, 0, 0 }; // 背景色{ 255, 250, 205 }; // 背景色
-	int crrTime;
-	int prevTime;
 	enum Scene
 	{
 		TITLE,
@@ -18,11 +17,24 @@ namespace
 	};
 }
 
+// グローバル変数として初期化
+int crrTime;
+int prevTime;
+
 std::vector<GameObject*> gameObjects; // ゲームオブジェクトのベクター
 std::vector<GameObject*> newObjects; // ゲームオブジェクトのベクター
 
 
 float gDeltaTime = 0.0f; // フレーム間の時間差
+
+// ゲームオブジェクトを全て解放する関数
+void ReleaseAllGameObjects()
+{
+	for (auto& obj : gameObjects) {
+		delete obj;
+	}
+	gameObjects.clear();
+}
 
 void DxInit()
 {
@@ -42,15 +54,6 @@ void DxInit()
 	SetDrawScreen(DX_SCREEN_BACK);
 }
 
-void MyGame()
-{
-
-	DrawFormatString(100, 100, GetColor(0, 0, 0), "ウィンドウのテスト");
-	static int timer = 0;
-	timer++;
-	DrawFormatString(100, 150, GetColor(0, 0, 0), "%010d", timer);
-}
-
 // 現在のシーン
 Scene currentScene = TITLE;
 
@@ -61,6 +64,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 	prevTime = GetNowCount();
 
 	Stage* stage = new Stage(); // ステージオブジェクトの生成
+	Player* player = nullptr; // プレイヤーポインタを初期化
 
 
 	while (true)
@@ -78,10 +82,13 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 		switch (currentScene)
 		{
 		case TITLE:
-			DrawString(100, 100, "TITLE", GetColor(255, 255, 255));
+			DrawString(100, 100, "TITLE Scene", GetColor(255, 255, 255));
 			DrawString(100, 200, "Push [P] the PlayScene", GetColor(255, 255, 255));
 			if (CheckHitKey(KEY_INPUT_P))
 			{
+				ReleaseAllGameObjects(); // シーン移行前にすべてのオブジェクトを解放
+				stage = new Stage();
+				player = dynamic_cast<Player*>(stage->GetPlayer());
 				currentScene = PLAY;
 			}
 			break;
@@ -93,6 +100,7 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 				}
 				newObjects.clear(); // 新しいゲームオブジェクトのベクターをクリア
 			}
+			
 			//gameObjectsの更新
 			for (auto& obj : gameObjects) {
 				obj->Update(); // ゲームオブジェクトの更新
@@ -100,6 +108,11 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 			//gameObjectsの描画
 			for (auto& obj : gameObjects) {
 				obj->Draw(); // ゲームオブジェクトの描画
+			}
+
+			// Stageクラスにゲームオーバーへの移行判断を移譲
+			if (stage != nullptr && stage->IsGameOverReady()) {
+				currentScene = GAMEOVER;
 			}
 
 			for (auto it = gameObjects.begin(); it != gameObjects.end();) {
@@ -111,17 +124,15 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 					++it; // 次の要素へ
 				}
 			}
-			DrawString(100, 100, "PLAY", GetColor(255, 255, 255));
-			if (CheckHitKey(KEY_INPUT_O))
-			{
-				currentScene = GAMEOVER;
-			}
-			break;
-		case GAMEOVER: //仮の条件
+			
+		case GAMEOVER:
 			DrawString(100, 100, "GAMEOVER", GetColor(255, 255, 255));
 			DrawString(100, 200, "Push [T] the TitleScene", GetColor(255, 255, 255));
 			if (CheckHitKey(KEY_INPUT_T))
 			{
+				ReleaseAllGameObjects();
+				stage = nullptr;
+				player = nullptr;
 				currentScene = TITLE;
 			}
 			break;
@@ -143,6 +154,9 @@ int WINAPI WinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _
 		if (CheckHitKey(KEY_INPUT_ESCAPE) == 1)
 			break;
 	}
+
+	// 終了時にゲームオブジェクトをすべて解放
+	ReleaseAllGameObjects();
 
 	DxLib_End();
 	return 0;

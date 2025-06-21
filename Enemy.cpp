@@ -126,7 +126,3 @@ void Enemy::Shoot()
 		beam->SetFired(true);
 	}
 }
-
-//EnemyBeam* Enemy::GetActiveBeam()
-//{
-//}

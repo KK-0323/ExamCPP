@@ -3,7 +3,6 @@
 #include "globals.h"
 #include "Input.h"
 #include "Bullet.h"
-#include "Effect.h"
 
 
 namespace
@@ -44,7 +43,6 @@ Player::Player()
 Player::~Player()
 {
 	//画面サイズを解放（あとで書く！）
-	new Effect({ x_, y_ });
 	if (hImage_ != -1)
 	{
 		DeleteGraph(hImage_); // 画像のハンドルを解放

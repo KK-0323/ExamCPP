@@ -5,6 +5,7 @@
 #include "Bullet.h"
 #include "EnemyBeam.h"
 #include "GameObject.h"
+#include "Effect.h"
 
 namespace
 {
@@ -30,10 +31,10 @@ namespace
 }
 
 Stage::Stage()
-	:GameObject(), play_(nullptr), hBackground(-1)
+	:GameObject(), player_(nullptr), hBackground(-1)
 {
 	AddGameObject(this); // ステージオブジェクトをゲームオブジェクトのベクターに追加
-	play_ = new Player(); // プレイヤーオブジェクトの生成
+	player_ = new Player(); // プレイヤーオブジェクトの生成
 	enemy_ = std::vector<Enemy*>(ENEMY_NUM); // 敵オブジェクトの生成
 	for (int i = 0; i < ENEMY_NUM; i++) {
 		int col = i % ENEMY_COL_SIZE; // 列
@@ -59,8 +60,7 @@ Stage::~Stage()
 void Stage::Update()
 {
 	//ここに当たり判定を描きたい！
-	std::vector<Bullet*> bullets = play_->GetAllBullets();
-	//std::vector<EnemyBeam*> beams = ene_->GetAllBeams(); //ene_が単一のEnemyしか指していない
+	std::vector<Bullet*> bullets = player_->GetAllBullets();
 	
 	//プレイヤーの弾と敵の当たり判定
 	for (auto& e : enemy_)
@@ -79,37 +79,39 @@ void Stage::Update()
 		}
 	}
 
-	//自分でプレイヤーと敵の弾の当たり判定をやろうとしたこと
-	//for (auto&  p: player_)
-	//{
-	//	for (auto& b : beams)
-	//	{
-	//		if (b->IsFired() && p->IsAlive()) {
-	//			if (IntersectRect(p->GetRect(), b->GetRect()))
-	//			{
-	//				if (b->IsFired())
-	//					b->SetFired(false);
-	//				if (p->IsAlive())
-	//					p->SetAlive(false);
-	//			}
-	//		}
-	//	}
-	//}
-
-
 	// プレイヤーと敵の弾の当たり判定
 	// gameObject ベクターから EnemyBeam オブジェクトをフィルタリングして取得
-	for (auto& obj : gameObjects)
-	{
-		EnemyBeam* beam = dynamic_cast<EnemyBeam*>(obj);
-		if (beam != nullptr && beam->IsFired() && play_->IsAlive()) {
-			if (IntersectRect(play_->GetRect(), beam->GetRect()))
-			{
-				if (beam->IsFired())
+	if (!playerIsDead_ && player_->IsAlive()) { // プレイヤーが生きている間当たり判定をする
+		for (auto& obj : gameObjects)
+		{
+			EnemyBeam* beam = dynamic_cast<EnemyBeam*>(obj);
+			if (beam != nullptr && beam->IsFired()) {
+				if (IntersectRect(player_->GetRect(), beam->GetRect()))
+				{
 					beam->SetFired(false);
-				if (play_->IsAlive())
-					play_->SetAlive(false); // プレイヤーが弾に当たったら削除(死亡)
+					player_->SetAlive(false); // プレイヤーが弾に当たったら死亡
+					playerIsDead_ = true; // プレイヤーが死亡したことを記録
+
+					// プレイヤーが死亡したらエフェクトを生成
+					new Effect({ player_->GetRect().x + player_->GetRect().width / 2,
+								player_->GetRect().y + player_->GetRect().height / 2 });
+					break;
+				}
 			}
+		}
+	}
+	
+	// プレイヤーが死亡していてエフェクトが消えるのを待つ
+	if (playerIsDead_ && !effectsFinished_) {
+		bool playerEffectAlive = false;
+		for (const auto& obj : gameObjects) {
+			if (dynamic_cast<Effect*>(obj) != nullptr) {
+				playerEffectAlive = true;
+				break;
+			}
+		}
+		if (!playerEffectAlive) {
+			effectsFinished_ = true; // エフェクトが消えた
 		}
 	}
 }
