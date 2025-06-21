@@ -4,6 +4,7 @@
 #include "Enemy.h"
 #include "Bullet.h"
 #include "EnemyBeam.h"
+#include "GameObject.h"
 
 namespace
 {
@@ -59,8 +60,9 @@ void Stage::Update()
 {
 	//ここに当たり判定を描きたい！
 	std::vector<Bullet*> bullets = play_->GetAllBullets();
-	std::vector<EnemyBeam*> beams = ene_->GetAllBeams();
+	//std::vector<EnemyBeam*> beams = ene_->GetAllBeams(); //ene_が単一のEnemyしか指していない
 	
+	//プレイヤーの弾と敵の当たり判定
 	for (auto& e : enemy_)
 	{
 		for (auto& b : bullets)
@@ -76,22 +78,40 @@ void Stage::Update()
 			}
 		}
 	}
-	for (auto&  p: player_)
+
+	//自分でプレイヤーと敵の弾の当たり判定をやろうとしたこと
+	//for (auto&  p: player_)
+	//{
+	//	for (auto& b : beams)
+	//	{
+	//		if (b->IsFired() && p->IsAlive()) {
+	//			if (IntersectRect(p->GetRect(), b->GetRect()))
+	//			{
+	//				if (b->IsFired())
+	//					b->SetFired(false);
+	//				if (p->IsAlive())
+	//					p->SetAlive(false);
+	//			}
+	//		}
+	//	}
+	//}
+
+
+	// プレイヤーと敵の弾の当たり判定
+	// gameObject ベクターから EnemyBeam オブジェクトをフィルタリングして取得
+	for (auto& obj : gameObjects)
 	{
-		for (auto& b : beams)
-		{
-			if (b->IsFired() && p->IsAlive()) {
-				if (IntersectRect(p->GetRect(), b->GetRect()))
-				{
-					if (b->IsFired())
-						b->SetFired(false);
-					if (p->IsAlive())
-						p->SetAlive(false);
-				}
+		EnemyBeam* beam = dynamic_cast<EnemyBeam*>(obj);
+		if (beam != nullptr && beam->IsFired() && play_->IsAlive()) {
+			if (IntersectRect(play_->GetRect(), beam->GetRect()))
+			{
+				if (beam->IsFired())
+					beam->SetFired(false);
+				if (play_->IsAlive())
+					play_->SetAlive(false); // プレイヤーが弾に当たったら削除(死亡)
 			}
 		}
 	}
-
 }
 
 void Stage::Draw()

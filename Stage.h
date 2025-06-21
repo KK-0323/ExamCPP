@@ -9,8 +9,8 @@ class Stage :
 	public GameObject
 {
 private:
-	Player* play_;
-	Enemy* ene_;
+	Player* play_; //この定義の仕方はよくないと思ってるけどひとまずの代案
+	Enemy* ene_;   //↑
 	std::vector<Player*> player_; // プレイヤーオブジェクト
 	std::vector<Enemy*> enemy_; // 敵オブジェクト
 	int hBackground;

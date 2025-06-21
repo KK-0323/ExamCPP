@@ -2,6 +2,7 @@
 #include "DxLib.h"
 #include <string>
 #include "Effect.h"
+#include "Player.h"
 #include "EnemyBeam.h"
 
 namespace
@@ -112,28 +113,20 @@ void Enemy::Draw()
 		hImage_, TRUE);
 }
 
-//EnemyBeam* Enemy::GetActiveBeam()
-//{
-//	return nullptr;
-//}
+EnemyBeam* Enemy::GetActiveBeam()
+{
+	return nullptr;
+}
 
-//void Enemy::Shoot()
-//{
-//	EnemyBeam* beam = GetActiveBeam();
-//	if (beam != nullptr) {
-//		beam->SetPos(x_, y_);
-//		beam->SetFired(true);
-//	}
-//}
-//
+void Enemy::Shoot()
+{
+	EnemyBeam* beam = GetActiveBeam();
+	if (beam != nullptr) {
+		beam->SetPos(x_, y_);
+		beam->SetFired(true);
+	}
+}
+
 //EnemyBeam* Enemy::GetActiveBeam()
 //{
-//	for (auto& itr : beams_)
-//	{
-//		if (!itr->IsFired())
-//		{
-//			return itr; // ”­ŽË‚³‚ê‚Ä‚¢‚È‚¢’e‚ð•Ô‚·
-//		}
-//	}
-//	return nullptr;
 //}

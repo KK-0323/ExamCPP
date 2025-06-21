@@ -19,7 +19,7 @@ public:
 	~Enemy();
 	void Update() override;
 	void Draw() override;
-	//void Shoot(); //’e‚ğ”­Ë‚·‚éŠÖ”
+	void Shoot(); //’e‚ğ”­Ë‚·‚éŠÖ”
 	void SetPos(float x, float y) { x_ = x; y_ = y; } //“G‚ÌÀ•W‚ğİ’è
 	Rect GetRect() const { return { x_,y_,imageSize_.x,imageSize_.y }; } // “G‚Ì‹éŒ`‚ğæ“¾
 	//void SetID(int id) { ID_ = id; } //“G‚ÌID‚ğİ’è
@@ -38,5 +38,5 @@ private:
 	int ID_; //“G‚ÌID
 	ETYPE type_; //“G‚Ìí—Ş
 	std::vector<EnemyBeam*> beams_; // “G‚ª”­Ë‚µ‚½’e‚ÌƒxƒNƒ^[
-	//EnemyBeam* GetActiveBeam();
+	EnemyBeam* GetActiveBeam();
 };
