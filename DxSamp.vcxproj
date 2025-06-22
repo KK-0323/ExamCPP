@@ -150,10 +150,14 @@
     <ClCompile Include="Enemy.cpp" />
     <ClCompile Include="EnemyBeam.cpp" />
     <ClCompile Include="GameObject.cpp" />
+    <ClCompile Include="GameOverScene.cpp" />
     <ClCompile Include="Input.cpp" />
     <ClCompile Include="Player.cpp" />
+    <ClCompile Include="PlayScene.cpp" />
+    <ClCompile Include="SceneManager.cpp" />
     <ClCompile Include="Stage.cpp" />
     <ClCompile Include="theMain.cpp" />
+    <ClCompile Include="TitleScene.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Bullet.h" />
@@ -161,10 +165,14 @@
     <ClInclude Include="Enemy.h" />
     <ClInclude Include="EnemyBeam.h" />
     <ClInclude Include="GameObject.h" />
-    <ClInclude Include="Globals.h" />
+    <ClInclude Include="GameOverScene.h" />
+    <ClInclude Include="globals.h" />
     <ClInclude Include="Input.h" />
     <ClInclude Include="Player.h" />
+    <ClInclude Include="PlayScene.h" />
+    <ClInclude Include="SceneManager.h" />
     <ClInclude Include="Stage.h" />
+    <ClInclude Include="TitleScene.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
