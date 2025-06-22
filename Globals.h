@@ -4,7 +4,7 @@
 const int WIN_WIDTH = 1024;
 const int WIN_HEIGHT = 768;
 
-extern float gDeltaTime; // ƒtƒŒ[ƒ€ŠÔ‚ÌŠÔ·
+extern float gDeltaTime; // ?t???[????????????
 
 inline float GetDeltaTime()
 {
@@ -25,6 +25,6 @@ struct Rect
 	float height;
 	inline Point GetCenter() const
 	{
-		return{ x + width / 2,y + height / 2 };
+		return { x + width / 2, y + height / 2 };
 	}
 };

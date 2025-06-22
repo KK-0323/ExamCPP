@@ -1,8 +1,6 @@
 #pragma once
 #include "GameObject.h"
-#include "Globals.h"
-
-class EnemyBeam; //‘O•ûéŒ¾
+#include "globals.h"
 
 enum ETYPE
 {
@@ -19,24 +17,21 @@ public:
 	~Enemy();
 	void Update() override;
 	void Draw() override;
-	void Shoot(); //’e‚ğ”­Ë‚·‚éŠÖ”
 	void SetPos(float x, float y) { x_ = x; y_ = y; } //“G‚ÌÀ•W‚ğİ’è
-	Rect GetRect() const { return { x_,y_,imageSize_.x,imageSize_.y }; } // “G‚Ì‹éŒ`‚ğæ“¾
+	Rect GetRect() const { return { x_, y_, imageSize_.x, imageSize_.y }; } // “G‚Ì‹éŒ`‚ğæ“¾	
 	//void SetID(int id) { ID_ = id; } //“G‚ÌID‚ğİ’è
 	void SetMaxMoveX(float xmax) { xMoveMax_ = xmax; }
 	void SetXorigin(float x) { xorigin_ = x; }
-	std::vector<EnemyBeam*> GetAllBeams() const { return beams_; } // ‘S‚Ä‚Ì’e‚ğæ“¾
 protected:
 private:
 	int hImage_;  //“G‚Ì‰æ‘œƒnƒ“ƒhƒ‹
 	float x_, y_; //“G‚ÌÀ•W
 	float speed_; //“G‚ÌˆÚ“®‘¬“x
-	float xMoveMax_;
+	float xMoveMax_;//‰¡•ûŒü‚ÌˆÚ“®Å‘å’l
 	float xorigin_;
 	float moveTime_;
 	Point imageSize_;
+
 	int ID_; //“G‚ÌID
 	ETYPE type_; //“G‚Ìí—Ş
-	std::vector<EnemyBeam*> beams_; // “G‚ª”­Ë‚µ‚½’e‚ÌƒxƒNƒ^[
-	EnemyBeam* GetActiveBeam();
 };

@@ -3,9 +3,6 @@
 #include "Player.h"
 #include "Enemy.h"
 #include "Bullet.h"
-#include "EnemyBeam.h"
-#include "GameObject.h"
-#include "Effect.h"
 
 namespace
 {
@@ -42,7 +39,6 @@ Stage::Stage()
 		ETYPE enemyType[ENEMY_ROW_SIZE] = { BOSS, KNIGHT, MID, ZAKO, ZAKO, ZAKO, ZAKO }; // 敵の種類
 		enemy_[i] = new Enemy(i, enemyType[row]); // 敵オブジェクトの生成
 
-		enemy_[i]->SetPos(col * 55.0f, row * 50.0f); // 敵の初期位置を設定
 		enemy_[i]->SetMaxMoveX(ENEMY_LEFT_MARGIN);
 
 		enemy_[i]->SetPos(col * ENEMY_ALIGN_X + ENEMY_LEFT_MARGIN,
@@ -61,8 +57,6 @@ void Stage::Update()
 {
 	//ここに当たり判定を描きたい！
 	std::vector<Bullet*> bullets = player_->GetAllBullets();
-	
-	//プレイヤーの弾と敵の当たり判定
 	for (auto& e : enemy_)
 	{
 		for (auto& b : bullets)
@@ -79,46 +73,11 @@ void Stage::Update()
 		}
 	}
 
-	// プレイヤーと敵の弾の当たり判定
-	// gameObject ベクターから EnemyBeam オブジェクトをフィルタリングして取得
-	if (!playerIsDead_ && player_->IsAlive()) { // プレイヤーが生きている間当たり判定をする
-		for (auto& obj : gameObjects)
-		{
-			EnemyBeam* beam = dynamic_cast<EnemyBeam*>(obj);
-			if (beam != nullptr && beam->IsFired()) {
-				if (IntersectRect(player_->GetRect(), beam->GetRect()))
-				{
-					beam->SetFired(false);
-					player_->SetAlive(false); // プレイヤーが弾に当たったら死亡
-					playerIsDead_ = true; // プレイヤーが死亡したことを記録
-
-					// プレイヤーが死亡したらエフェクトを生成
-					new Effect({ player_->GetRect().x + player_->GetRect().width / 2,
-								player_->GetRect().y + player_->GetRect().height / 2 });
-					break;
-				}
-			}
-		}
-	}
-	
-	// プレイヤーが死亡していてエフェクトが消えるのを待つ
-	if (playerIsDead_ && !effectsFinished_) {
-		bool playerEffectAlive = false;
-		for (const auto& obj : gameObjects) {
-			if (dynamic_cast<Effect*>(obj) != nullptr) {
-				playerEffectAlive = true;
-				break;
-			}
-		}
-		if (!playerEffectAlive) {
-			effectsFinished_ = true; // エフェクトが消えた
-		}
-	}
 }
 
 void Stage::Draw()
 {
 	SetDrawBlendMode(DX_BLENDMODE_ALPHA, 200);
 	DrawExtendGraph(0, 0, WIN_WIDTH, WIN_HEIGHT, hBackground, FALSE);
-		SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
+	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 }
