@@ -26,7 +26,6 @@ Effect::Effect(Point _pos)
 	//hImage_ = LoadGraph(EIMG_PATH.c_str());
 	LoadDivGraph(EIMG_PATH.c_str(), MAX_FRAME, DIV_NUM, DIV_NUM,
 		EFFECT_IMAGE_SIZE, EFFECT_IMAGE_SIZE, hImage_.data());
-	AddGameObject(this);
 }
 
 Effect::~Effect()

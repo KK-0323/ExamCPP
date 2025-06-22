@@ -17,7 +17,7 @@ EnemyBeam::EnemyBeam()
 {
 	hImage_ = LoadGraph("Assets\\ebeams.png"); // 弾の画像を読み込む
 
-	AddGameObject(this); // 弾オブジェクトをゲームオブジェクトのベクターに追加
+	
 }
 
 EnemyBeam::EnemyBeam(float x, float y)
@@ -28,7 +28,7 @@ EnemyBeam::EnemyBeam(float x, float y)
 
 	hImage_ = LoadGraph("Assets\\ebeams.png"); // 弾の画像を読み込む
 
-	AddGameObject(this); // 弾オブジェクトをゲームオブジェクトのベクターに追加
+	
 }
 
 EnemyBeam::EnemyBeam(Point pos_)
@@ -38,7 +38,7 @@ EnemyBeam::EnemyBeam(Point pos_)
 {
 	hImage_ = LoadGraph("Assets\\ebeams.png"); // 弾の画像を読み込む
 
-	AddGameObject(this); // 弾オブジェクトをゲームオブジェクトのベクターに追加
+	
 }
 
 EnemyBeam::~EnemyBeam()

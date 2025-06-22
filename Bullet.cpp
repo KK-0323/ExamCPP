@@ -21,7 +21,6 @@ Bullet::Bullet()
 {
 	hImage_ = LoadGraph(BULLET_IMAGE_PATH.c_str()); // ’e‚Ì‰æ‘œ‚ğ“Ç‚İ‚Ş
 	speed_ = BULLET_INIT_SPEED; // ˆÚ“®‘¬“x
-	AddGameObject(this);
 }
 
 Bullet::Bullet(float x, float y)
@@ -31,7 +30,6 @@ Bullet::Bullet(float x, float y)
 {
 	hImage_ = LoadGraph(BULLET_IMAGE_PATH.c_str()); // ’e‚Ì‰æ‘œ‚ğ“Ç‚İ‚Ş
 	speed_ = BULLET_INIT_SPEED; // ˆÚ“®‘¬“x
-	AddGameObject(this);
 }
 
 Bullet::~Bullet()

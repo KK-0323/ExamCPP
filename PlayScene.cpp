@@ -6,6 +6,10 @@
 #include "Bullet.h"
 #include "GameObject.h"
 #include "Input.h"
+#include "Effect.h"
+
+std::vector<GameObject*> gameObjects; // ゲームオブジェクトのベクター
+std::vector<GameObject*> newObjects; // ゲームオブジェクトのベクター
 
 namespace
 {
@@ -30,13 +34,25 @@ namespace
 	}
 }
 
-std::vector<GameObject*> gameObjects; // ゲームオブジェクトのベクター
-std::vector<GameObject*> newObjects; // ゲームオブジェクトのベクター
 
 PlayScene::PlayScene(SceneManager* manager)
 	:GameObject(), sceneManager_(manager), hBackground(-1)
 {
+	for (auto& obj : gameObjects)
+	{
+		//delete obj;
+	}
+	gameObjects.clear();
+	newObjects.clear();
+
+
 	player_ = new Player(); // プレイヤーオブジェクトの生成
+	AddGameObject(player_);
+	for (auto& blt : player_->GetAllBullets())
+	{
+		AddGameObject(blt);
+	}
+
 	enemy_ = std::vector<Enemy*>(ENEMY_NUM); // 敵オブジェクトの生成
 	for (int i = 0; i < ENEMY_NUM; i++) {
 		int col = i % ENEMY_COL_SIZE; // 列
@@ -46,14 +62,23 @@ PlayScene::PlayScene(SceneManager* manager)
 
 		enemy_[i]->SetMaxMoveX(ENEMY_LEFT_MARGIN);
 
-		enemy_[i]->SetPos(col * ENEMY_ALIGN_X + ENEMY_LEFT_MARGIN,
-			row * ENEMY_ALIGN_Y + ENEMY_TOP_MARGIN); // 敵の初期位置を設定
-		enemy_[i]->SetXorigin(col * ENEMY_ALIGN_X + ENEMY_LEFT_MARGIN);
+		enemy_[i]->SetPos(static_cast<float>( col * ENEMY_ALIGN_X + ENEMY_LEFT_MARGIN),
+						  static_cast<float>( row * ENEMY_ALIGN_Y + ENEMY_TOP_MARGIN)); // 敵の初期位置を設定
+		enemy_[i]->SetXorigin(static_cast<float>( col * ENEMY_ALIGN_X + ENEMY_LEFT_MARGIN));
 
 		enemy_.push_back(enemy_[i]);
+		AddGameObject(enemy_[i]);
 	}
+	
 
 	hBackground = LoadGraph("Assets\\bg.png");
+
+	// オブジェクトが生成された後に、newObjectsに溜まったオブジェクトをgameObjectsに移動させる
+	for (auto& obj : newObjects)
+	{
+		gameObjects.push_back(obj);
+	}
+	newObjects.clear();
 }
 
 PlayScene::~PlayScene()
@@ -64,6 +89,11 @@ PlayScene::~PlayScene()
 		delete obj;
 	}
 	gameObjects.clear();
+
+	for (auto& obj : newObjects)
+	{
+		delete obj;
+	}
 	newObjects.clear();
 }
 
@@ -78,7 +108,10 @@ void PlayScene::Update()
 	}
 	//gameObjectsの更新
 	for (auto& obj : gameObjects) {
-		obj->Update(); // ゲームオブジェクトの更新
+		if (obj->IsAlive())
+		{
+			obj->Update(); // ゲームオブジェクトの更新
+		}
 	}
 
 	// 当たり判定の処理
@@ -90,10 +123,9 @@ void PlayScene::Update()
 			if (b->IsFired() && e->IsAlive()) {
 				if (IntersectRect(e->GetRect(), b->GetRect()))
 				{
-					if (b->IsFired())
 						b->SetFired(false);
-					if (e->IsAlive())
 						e->SetAlive(false);
+						AddGameObject(new Effect(e->GetRect().GetCenter()));
 				}
 			}
 		}

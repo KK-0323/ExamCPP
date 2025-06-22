@@ -14,10 +14,10 @@ public:
 	void SetAlive(bool alive) { isAlive_ = alive; }
 };
 
-extern std::vector<GameObject*> gameObjects; // ゲームオブジェクトのベクター
-extern std::vector<GameObject*> newObjects; // ゲームオブジェクトのベクター
-
-inline void AddGameObject(GameObject* obj)
-{
-	newObjects.push_back(obj); // ゲームオブジェクトをベクターに追加
-}
+//extern std::vector<GameObject*> gameObjects; // ゲームオブジェクトのベクター
+//extern std::vector<GameObject*> newObjects; // ゲームオブジェクトのベクター
+//
+//inline void AddGameObject(GameObject* obj)
+//{
+//	newObjects.push_back(obj); // ゲームオブジェクトをベクターに追加
+//}

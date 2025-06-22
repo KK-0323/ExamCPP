@@ -35,17 +35,29 @@ Player::Player()
 	x_ = PLAYER_INIT_X; // 初期座標
 	y_ = PLAYER_INIT_Y; // 初期座標
 	speed_ = PLAYER_INIT_SPEED; // 移動速度
+
 	for (int i = 0; i < PLAYER_BULLET_NUM; i++)
 	{
 		bullets_.push_back(new Bullet(-10, -10)); // 弾のベクターを初期化
 	}
 
-	AddGameObject(this); // プレイヤーオブジェクトをゲームオブジェクトのベクターに追加
+	
 }
 
 Player::~Player()
 {
 	//画面サイズを解放（あとで書く！）
+	if (hImage_ != -1)
+	{
+		DeleteGraph(hImage_);
+		hImage_ = -1;
+	}
+
+	//for (auto& bullet : bullets_)
+	//{
+	//	delete bullet;
+	//}
+	bullets_.clear();
 }
 
 void Player::Update()
@@ -100,7 +112,7 @@ void Player::Shoot()
 	//}
 
 	Bullet* blt = GetActiveBullet();
-	if (blt != nullptr) {
+	if (blt) {
 		blt->SetPos(x_ + BULLET_IMAGE_MARGIN, y_); // 弾の位置を設定
 		blt->SetFired(true); // 発射状態にする
 	}
@@ -108,11 +120,11 @@ void Player::Shoot()
 
 Bullet* Player::GetActiveBullet()
 {
-	for (auto& itr : bullets_)
+	for (auto& blt : bullets_)
 	{
-		if (!itr->IsFired())
+		if (!blt->IsFired())
 		{
-			return itr; // 発射されていない弾を返す
+			return blt; // 発射されていない弾を返す
 		}
 	}
 	return nullptr;
